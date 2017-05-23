@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kr.blogspot.httpcarelesssandbox.a170518hw.MainActivity">
+
+
+    <LinearLayout
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        android:layout_weight="1"
+
+        <CheckBox
+            android:id="@+id/stamp"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stamp"
+            android:textColor="#ffffff" />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/eraser"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="ERASER"
+            />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/open"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="OPEN"
+            />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/save"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="SAVE"
+            />
+    </LinearLayout>
+
+    <kr.blogspot.httpcarelesssandbox.a170518hw.myCanvas
+        android:id="@+id/canvas"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:background="#000000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        android:layout_weight="1"
+
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/rotate"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="ROTATE"
+            />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/move"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="MOVE"
+            />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/scale"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="SCALE"
+            />
+        <Button
+            android:onClick="onClick"
+            android:id="@+id/skew"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:text="SKEW"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>
