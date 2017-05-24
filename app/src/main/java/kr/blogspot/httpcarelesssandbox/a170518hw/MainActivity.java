@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             else
                 brotate=true;
 
-            Toast.makeText(this, brotate+"메인로테이트", Toast.LENGTH_SHORT).show();
+            //T/oast.makeText(this, brotate+"메인로테이트", Toast.LENGTH_SHORT).show();
             myCanvas.setRotate(brotate);
             myCanvas.setOperationType("stamp");
             myCanvas.getstatus();

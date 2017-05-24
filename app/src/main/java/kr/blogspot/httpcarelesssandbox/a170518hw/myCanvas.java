@@ -135,14 +135,14 @@ public class myCanvas extends View {
 
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.close();
-            Toast.makeText(getContext(), "저장완료", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "저장완료", Toast.LENGTH_SHORT).show();
             return true;
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
-            Toast.makeText(getContext(), "저장안돼 1", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "저장안돼 1", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Log.e("IOException", e.getMessage());
-            Toast.makeText(getContext(), "저장안돼 2", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), "저장안돼 2", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -296,12 +296,12 @@ public class myCanvas extends View {
                 if(!stamp)
                     stampY=stampX=-1;
 
-                Toast.makeText(getContext(), stamp+"스탬프", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), stamp+"스탬프", Toast.LENGTH_SHORT).show();
             }
 
             else if(operationType.equals("eraser")){
                 //지우개
-                Toast.makeText(getContext(), operationType+"지우개의 오퍼레이션타입", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), operationType+"지우개의 오퍼레이션타입", Toast.LENGTH_SHORT).show();
                 clear();
             }
 
@@ -314,8 +314,8 @@ public class myCanvas extends View {
             }
 
             else if(operationType.equals("rotate")){
-                    Toast.makeText(getContext(), operationType+"로테이트의 오퍼레이션타입", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getContext(), rotate+"로테이트", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), operationType+"로테이트의 오퍼레이션타입", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), rotate+"로테이트", Toast.LENGTH_SHORT).show();
             }
 
             else if(operationType.equals("move")){
