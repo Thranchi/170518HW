@@ -3,8 +3,11 @@ package kr.blogspot.httpcarelesssandbox.a170518hw;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -30,20 +33,21 @@ public class myCanvas extends View {
     Paint mPaint;
     String operationType = "";
     Bitmap img;
-    int oldX=-1;
-    int oldY=-1;
-    MainActivity m=new MainActivity();
-    boolean stamp=false, open=false, save=false, rotate=false, move=false, scale=false, skew=false;
+    int oldX = -1;
+    int oldY = -1;
+    MainActivity m = new MainActivity();
+    boolean stamp = false, open = false, save = false, rotate = false, move = false, scale = false, skew = false;
+    boolean bluring = false, coloring = false, penwidth = false, penred = false, penblue = false;
 
     public myCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        this.mPaint=new Paint();
+        this.mPaint = new Paint();
         this.mPaint.setColor(Color.BLACK);
     }
 
     public myCanvas(Context context) {
         super(context);
-        this.mPaint=new Paint();
+        this.mPaint = new Paint();
         this.mPaint.setColor(Color.BLACK);
     }
 
@@ -58,7 +62,7 @@ public class myCanvas extends View {
         mCanvas.drawColor(Color.BLACK);
 
         img = BitmapFactory.decodeResource(getResources(), R.drawable.one);
-        mCanvas.drawBitmap(img,1,1,mPaint);
+        //mCanvas.drawBitmap(img,1,1,mPaint);
     }
 
     //스탬프 난수생성 후 선택
@@ -106,72 +110,37 @@ public class myCanvas extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(mCanvas);
-        mPaint.setColor(Color.BLACK);
-        //스탬프
-        if(stamp) {
-            if(stampY>0 &&stampX>0) {
-                stars = Bitmap.createScaledBitmap(img, img.getWidth() / 2, img.getHeight() / 2, false);
-                //로테이트
-                if(rotate)
-                {
-                    mCanvas.rotate(45,this.getWidth()/2,getHeight()/2);
-                }
-
-                //무브
-                if(move)
-                {
-                    stampX+=100;
-                    stampY+=100;
-                }
-
-                //스케일
-                if(scale)
-                {
-                    stars = Bitmap.createScaledBitmap(stars, stars.getWidth() / 2, stars.getHeight() / 2, false);
-                    stars = Bitmap.createScaledBitmap(stars, stars.getWidth() *3, stars.getHeight() *3, false);
-                }
-
-                //왜곡
-                if(skew)
-                {
-                    mCanvas.skew(0.3f, 0.3f);
-                }
-
-                mCanvas.drawBitmap(stars, stampX, stampY, mPaint);
-
-            }
-        }
+        if (mBitmap != null)
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        super.onDraw(canvas);
     }
 
     //지우개
     private void clear() {
-            mBitmap.eraseColor(Color.BLUE);
-            invalidate();
+        mBitmap.eraseColor(Color.BLACK);
+        invalidate();
     }
 
     //저장
     public boolean save(String halosailor) {
-        try
-        {
+        try {
             Context context = this.getContext();
             File storage = context.getCacheDir(); //임시파일 저장 경로
 
             String fileName = halosailor + ".jpg";
 
-            File tempFile = new File(storage,fileName);
+            File tempFile = new File(storage, fileName);
 
             FileOutputStream out = new FileOutputStream(tempFile);
+
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
             out.close();
             Toast.makeText(getContext(), "저장완료", Toast.LENGTH_SHORT).show();
             return true;
-        }
-        catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
             Toast.makeText(getContext(), "저장안돼 1", Toast.LENGTH_SHORT).show();
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             Log.e("IOException", e.getMessage());
             Toast.makeText(getContext(), "저장안돼 2", Toast.LENGTH_SHORT).show();
         }
@@ -179,47 +148,142 @@ public class myCanvas extends View {
     }
 
     //로드
-    public boolean load(String halosailor){
-        try
-        {
+    public boolean load(String halosailor) {
+        clear();
         Context context = this.getContext();
-        File storage = context.getCacheDir(); //임시파일 저장 경로
-
-        String fileName = halosailor + ".jpg";
-
-        File tempFile = new File(storage,fileName);
-
-        FileInputStream in = new FileInputStream(tempFile);
-
-        in.close();
-       return true;
-    }
-        catch(FileNotFoundException e) {
-        Log.e("FileNotFoundException", e.getMessage());
-        Toast.makeText(getContext(), "로드안돼 1", Toast.LENGTH_SHORT).show();
-    }
-        catch(IOException e) {
-        Log.e("IOException", e.getMessage());
-        Toast.makeText(getContext(), "로드안돼 2", Toast.LENGTH_SHORT).show();
-    }
-        return false;
+        File storage = context.getCacheDir();
+        Bitmap bm = BitmapFactory.decodeFile(storage + "/" + halosailor + ".jpg");
+        bm = Bitmap.createScaledBitmap(bm, bm.getWidth() / 2, bm.getHeight() / 2, false);
+        mCanvas.drawBitmap(bm, mCanvas.getWidth() / 2 - bm.getWidth() / 2, mCanvas.getHeight() / 2 - bm.getHeight() / 2, mPaint);
+        invalidate();
+        return true;
     }
 
-    float stampX=-1,stampY=-1;
+    float stampX = -1, stampY = -1;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == event.ACTION_DOWN) {
-            if (stamp) {
+        if (stamp) {
+            if (event.getAction() == event.ACTION_DOWN) {
                 //눌린 곳 찾기
                 drawStamp();
                 stampX = event.getX();
                 stampY = event.getY();
-                invalidate();
+
+                if (stamp) {
+                    if (stampY > 0 && stampX > 0) {
+                        stars = Bitmap.createScaledBitmap(img, img.getWidth() / 2, img.getHeight() / 2, false);
+                        //로테이트
+                        if (rotate) {
+                            mCanvas.rotate(45, this.getWidth() / 2, getHeight() / 2);
+                        }
+
+                        //무브
+                        if (move) {
+                            stampX += 100;
+                            stampY += 100;
+                        }
+
+                        //스케일
+                        if (scale) {
+                            stars = Bitmap.createScaledBitmap(stars, stars.getWidth() / 2, stars.getHeight() / 2, false);
+                            stars = Bitmap.createScaledBitmap(stars, stars.getWidth() * 3, stars.getHeight() * 3, false);
+                        }
+
+                        //왜곡
+                        if (skew) {
+                            mCanvas.skew(0.3f, 0.3f);
+                        }
+
+                        //컬러링
+                        if (coloring) {
+                            float[] array = {
+                                    2, 0, 0, 0, -25f,
+                                    0, 2, 0, 0, -25f,
+                                    0, 0, 2, 0, -25f,
+                                    0, 0, 0, 2, 0
+                            };
+
+                            ColorMatrix colorMatrix = new ColorMatrix(array);
+                            ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+                            mPaint.setColorFilter(filter);
+                        } else if (!coloring) {
+                            mPaint.setColorFilter(null);
+                        }
+
+                        //블러링
+                        if (bluring) {
+                            BlurMaskFilter blur = new BlurMaskFilter(100, BlurMaskFilter.Blur.NORMAL);
+                            mPaint.setMaskFilter(blur);
+                        } else if (!bluring) {
+                            mPaint.setMaskFilter(null);
+                        }
+
+
+                        mCanvas.drawBitmap(stars, stampX, stampY, mPaint);
+
+                    }
+
+                    invalidate();
+                }
             }
+            return true;
+        } else if (!stamp) {
+            //드로우하자
+            int X = (int) event.getX();
+            int Y = (int) event.getY();
+
+
+            //색깔
+            mPaint.setColor(Color.YELLOW);
+
+            if(penblue)
+            {
+                mPaint.setColor(Color.BLUE);
+            }
+            else if(penred)
+            {
+                mPaint.setColor(Color.RED);
+            }
+
+            //굵기
+            if(penwidth)
+            {
+                mPaint.setStrokeWidth(5);
+            }
+            else if(!penwidth)
+            {
+                mPaint.setStrokeWidth(3);
+            }
+
+            if (event.getAction() == event.ACTION_UP) {
+                if(oldX!=-1){
+                    mCanvas.drawLine(oldX,oldY,X,Y,mPaint);
+                    invalidate();
+                }
+                oldX=-1;
+                oldY=-1;
+            }
+
+            else if (event.getAction() == event.ACTION_DOWN) {
+                oldX=X;
+                oldY=Y;
+            }
+
+            else if (event.getAction() == event.ACTION_MOVE) {
+                if(oldX!=-1){
+                    mCanvas.drawLine(oldX,oldY,X,Y,mPaint);
+                    invalidate();
+                }
+                oldX=X;
+                oldY=Y;
+            }
+
+            return true;
+
         }
         return true;
     }
-
     public void setOperationType(String operationType){
         this.operationType=operationType;
         invalidate();
@@ -291,5 +355,25 @@ public class myCanvas extends View {
 
     public void setSkew(boolean skew) {
         this.skew = skew;
+    }
+
+    public void setBluring(boolean bluring) {
+        this.bluring = bluring;
+    }
+
+    public void setColoring(boolean coloring) {
+        this.coloring = coloring;
+    }
+
+    public void setPenwidth(boolean penwidth) {
+        this.penwidth = penwidth;
+    }
+
+    public void setPenred(boolean penred) {
+        this.penred = penred;
+    }
+
+    public void setPenblue(boolean penblue) {
+        this.penblue = penblue;
     }
 }

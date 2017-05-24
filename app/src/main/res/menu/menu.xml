@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/bluring"
+            android:orderInCategory="1"
+            android:title="Bluring" />
+
+        <item
+            android:id="@+id/coloring"
+            android:orderInCategory="1"
+            android:title="Coloring" />
+
+        <item
+            android:id="@+id/penwidthbig"
+            android:orderInCategory="1"
+            android:title="Pen Width Big" />
+
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/penred"
+            android:orderInCategory="2"
+            android:title="Pen Color RED" />
+
+        <item
+            android:id="@+id/penblue"
+            android:orderInCategory="2"
+
+            android:title="Pen Color BLUE" />
+    </group>
+</menu>

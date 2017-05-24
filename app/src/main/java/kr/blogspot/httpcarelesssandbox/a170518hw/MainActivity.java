@@ -2,9 +2,14 @@ package kr.blogspot.httpcarelesssandbox.a170518hw;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static java.security.AccessController.getContext;
@@ -13,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     myCanvas myCanvas;
     CheckBox stamp;
     boolean bstamp=false, berase=false, bopen=false, bsave=false, brotate=false, bmove=false, bscale=false, bskew=false;
+    boolean bluring=false, coloring=false, penwidth=false, penred=false, penblue=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,5 +151,71 @@ public class MainActivity extends AppCompatActivity {
             myCanvas.setOperationType("skew");
             myCanvas.getstatus();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.bluring) {
+            if (bluring) {
+                bluring = false;
+                item.setChecked(false);
+            }
+            else {
+                bluring = true;
+                item.setChecked(true);
+            }
+
+            myCanvas.setBluring(bluring);
+        } else if (item.getItemId() == R.id.coloring) {
+            if (coloring) {
+                coloring = false;
+                item.setChecked(false);
+            }
+            else {
+                coloring = true;
+                item.setChecked(true);
+            }
+
+            myCanvas.setColoring(coloring);
+        } else if (item.getItemId() == R.id.penwidthbig) {
+            if (penwidth) {
+                penwidth = false;
+                item.setChecked(false);
+            }
+            else {
+                penwidth = true;
+                item.setChecked(true);
+            }
+
+            myCanvas.setPenwidth(penwidth);
+        }
+
+        else if (item.getItemId() == R.id.penred) {
+            if (penred) {
+                penred = false;
+            }
+            else {
+                penred = true;
+            }
+            item.setChecked(true);
+            myCanvas.setPenred(penred);
+        }
+
+        else if (item.getItemId() == R.id.penblue) {
+            if (penblue) {
+                penblue = false;
+            }
+            else {
+                penblue = true;
+            }
+            item.setChecked(true);
+            myCanvas.setPenblue(penblue);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
